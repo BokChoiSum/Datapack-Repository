@@ -1,0 +1,22 @@
+df = []
+hi = 0
+tables = ['T01','T02','T03A','T03B','T03C','T03D','T03E','T04A','T04B','T04C','T04D','T05A','T05B','T05C',
+'T06A','T06B','T06C','T07A','T07B','T07C','T08A','T08B','T09A','T09B','T09C','T10A','T10B','T11A','T11B',
+'T12A','T12B','T12C','T12D','T12E','T13A','T13B','T14A','T14B','T14C','T15A','T15B','T16A','T16B','T16C',
+'T17A','T17B','T17C','T18A','T18B','T19A','T19B','T20A','T20B','T21A','T21B','T22A','T22B','T23A','T23B',
+'T24A','T24B','T24C','T24D','T25A','T25B','T25C','T26','T27','T28A','T28B','T29','T30A','T30B','T30C','T30D'
+,'T30E','T30F','T30G','T30H','T31A','T31B','T31C','T31D','T31E','T32A','T32B','T32C','T32D','T32E','T32F','T32G','T33A','T33B','T33C','T33D','T33E','T33F','T33G','T33H','T34','T35']
+
+for i in tables:
+    var = 'https://raw.githubusercontent.com/BokChoiSum/Census-Datapacks/main/2016Census_'+i+'_AUS_SA2.csv'
+    download = requests.get(var).content
+    convert = pd.read_csv(io.StringIO(download.decode('utf-8')))
+    df_filtered = convert[convert['SA2_MAINCODE_2016'].isin(areacodes)]
+    df_filtered = df_filtered.reset_index(drop=True)
+    # df.append(df_filtered)
+    merge = pd.merge(left=ASGS_2016,right=df_filtered,left_on='code',right_on='SA2_MAINCODE_2016',)
+    merge.drop(columns='code', inplace=True)
+    merge.drop(columns='SA2_MAINCODE_2016', inplace=True)
+    df.append(merge)
+   
+
